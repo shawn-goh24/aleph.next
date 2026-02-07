@@ -1,0 +1,49 @@
+{
+  "items": [
+    {
+      "id": 0,
+      "downstreamNode": 1,
+      "upstreamNode": 0
+    },
+    {
+      "id": 1,
+      "downstreamNode": 2,
+      "upstreamNode": 1
+    },
+    {
+      "id": 2,
+      "downstreamNode": 3,
+      "upstreamNode": 2
+    },
+    {
+      "id": 3,
+      "downstreamNode": 4,
+      "upstreamNode": 3
+    },
+    {
+      "id": 4,
+      "downstreamNode": 5,
+      "upstreamNode": 4
+    },
+    {
+      "id": 5,
+      "downstreamNode": 7,
+      "upstreamNode": 5
+    },
+    {
+      "id": 6,
+      "downstreamNode": 6,
+      "upstreamNode": 3
+    },
+    {
+      "id": 7,
+      "downstreamNode": 1,
+      "upstreamNode": 6
+    },
+    {
+      "id": 8,
+      "downstreamNode": 6,
+      "upstreamNode": 1
+    }
+  ]
+}

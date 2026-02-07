@@ -1,0 +1,44 @@
+{
+  "items": [
+    {
+      "id": 0,
+      "name": "Start Request",
+      "type": "Type 1"
+    },
+    {
+      "id": 1,
+      "name": "Validate Input",
+      "type": "Type 2"
+    },
+    {
+      "id": 2,
+      "name": "Process Data",
+      "type": "Type 1"
+    },
+    {
+      "id": 3,
+      "name": "Quality Check",
+      "type": "Type 3"
+    },
+    {
+      "id": 4,
+      "name": "Generate Report",
+      "type": "Type 1"
+    },
+    {
+      "id": 5,
+      "name": "Send Notification",
+      "type": "Type 2"
+    },
+    {
+      "id": 6,
+      "name": "Error Handling",
+      "type": "Type 3"
+    },
+    {
+      "id": 7,
+      "name": "Complete",
+      "type": "Type 1"
+    }
+  ]
+}
