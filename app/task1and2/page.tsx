@@ -1,4 +1,4 @@
-// todo: make page serverside if possible
+// todo: make this page serverside
 "use client";
 
 import Table from "@/components/table";
@@ -30,14 +30,24 @@ import {
 } from "ag-grid-community";
 import EditCellRenderer from "@/components/EditCellRenderer";
 import DeleteButtonCellRenderer from "@/components/DeleteButtonCellRenderer";
-import SigmaCanvas from "@/components/SigmaCanvas";
+import dynamic from "next/dynamic";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
+// todo: check what is this
+const SigmaCanvas = dynamic(() => import("@/components/SigmaCanvas"), {
+  ssr: false,
+});
+
 export default function Task1And2() {
-  "use memo";
   const [isNodeSheetOpen, setIsNodeSheetOpen] = useState(false);
   const [isEdgeSheetOpen, setIsEdgeSheetOpen] = useState(false);
+  const [nodeRowData, setNodeRowData] = useState<Node[]>(
+    nodeJsonData.items as Node[],
+  );
+  const [edgeRowData, setEdgeRowData] = useState<Edge[]>(
+    edgeJsonData.items as Edge[],
+  );
 
   // Shared default table options
   const defaultColDef = useMemo<ColDef>(
@@ -50,9 +60,6 @@ export default function Task1And2() {
   );
 
   // Table options for Nodes
-  const [nodeRowData, setNodeRowData] = useState<Node[]>(
-    nodeJsonData.items as Node[],
-  );
   const nodeColDefs = useMemo<(ColDef<Node> | ColGroupDef<Node>)[]>(
     () => [
       { field: "name" },
@@ -83,9 +90,6 @@ export default function Task1And2() {
   );
 
   // Table options for Edges
-  const [edgeRowData, setEdgeRowData] = useState<Edge[]>(
-    edgeJsonData.items as Edge[],
-  );
   const edgeColDefs = useMemo<(ColDef<Edge> | ColGroupDef<Edge>)[]>(
     () => [
       { field: "id" },
