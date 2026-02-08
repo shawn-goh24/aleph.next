@@ -1,11 +1,12 @@
-import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Input } from "./ui/input";
+import { SimulationResponse } from "@/types/json_data";
 
 interface JsonUploaderProps {
-  setJsonData: Dispatch<SetStateAction<null>>;
+  handleUpload: (fileName: string, content: SimulationResponse | null) => void;
 }
 
-export default function JsonUploader({ setJsonData }: JsonUploaderProps) {
+export default function JsonUploader({ handleUpload }: JsonUploaderProps) {
   const [error, setError] = useState("");
 
   const handleFileChange = (
@@ -21,15 +22,16 @@ export default function JsonUploader({ setJsonData }: JsonUploaderProps) {
       reader.onload = (e) => {
         try {
           if (!e.target) return;
+          console.log(file);
           // Parse the file content as a JSON object
           const content = JSON.parse(e.target.result as string);
-          setJsonData(content);
+          handleUpload(file.name, content);
         } catch (err) {
           console.error(err);
           setError(
             "Failed to parse JSON file. Please ensure the file is a valid JSON format.",
           );
-          setJsonData(null);
+          handleUpload(file.name, null);
         }
       };
 
@@ -41,14 +43,14 @@ export default function JsonUploader({ setJsonData }: JsonUploaderProps) {
       reader.readAsText(file);
     } else {
       setError("Please select a valid JSON file.");
-      setJsonData(null);
+      handleUpload(file.name, null);
     }
   };
 
   return (
     <div>
       <Input
-        className="cursor-pointer"
+        className="cursor-pointer bg-white hover:bg-gray-50"
         type="file"
         accept=".json"
         onChange={handleFileChange}
