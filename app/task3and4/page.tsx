@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
-import { useMemo, useState } from "react";
+import { use, useMemo, useState } from "react";
 import { pdf } from "@react-pdf/renderer";
 import { OutputStructure } from "@/types/openai";
 import ReportDocument from "@/components/report-document";
@@ -16,13 +16,19 @@ import { SimulationResponse } from "@/types/json_data";
 import ChartVisualisationSection from "@/components/chart/chart-visualisation-section";
 import { JsonSelector, JsonUploader } from "@/components/json-handlers";
 import Header from "@/components/header";
+import {
+  JsonListsContext,
+  UpdateJsonListsContext,
+} from "../providers/JsonListsProvider";
 
 export default function Task3And4() {
+  const listOfUploadedJson = use(JsonListsContext);
+  const setListOfUploadedJson = use(UpdateJsonListsContext);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [listOfUploadedJson, setListOfUploadedJson] = useState<
-    Record<string, { name: string; content: SimulationResponse }>
-  >({});
-  const [selectedFileId, setSelectedFileId] = useState<string>("");
+  const [selectedFileId, setSelectedFileId] = useState<string>(
+    Object.keys(listOfUploadedJson)?.[0] ?? "",
+  );
   const chartData = useMemo(() => {
     const jsonData = listOfUploadedJson[selectedFileId];
 
@@ -91,8 +97,6 @@ export default function Task3And4() {
     const result = await generateReport(listOfUploadedJson[selectedFileId]);
     await generateAndDownloadPDF(result);
   }
-
-  console.log(chartData);
 
   return (
     <div className="bg-gray-100 h-full">

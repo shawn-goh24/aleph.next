@@ -55,8 +55,6 @@ export const Table = <T,>({ pageSize = 10, name, ...props }: TableProps) => {
     gridRef.current?.api.paginationGoToPage(page);
   };
 
-  console.log("table");
-
   return (
     <div className="h-full w-full flex flex-col gap-2">
       <p className="font-bold pb-1">{name}</p>
@@ -124,9 +122,6 @@ function Pagination({
             </PaginationItem>
           );
         })}
-        {/* <PaginationItem>
-          <PaginationEllipsis />
-        </PaginationItem> */}
 
         <PaginationItem>
           <PaginationNext onClick={onNext} />

@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import NodeEdgeProvider from "./providers/NodeEdgeProvider";
+import JsonProvider from "./providers/JsonListsProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,7 +34,11 @@ export default function RootLayout({
       >
         <SidebarProvider>
           <AppSidebar />
-          <SidebarInset>{children}</SidebarInset>
+          <NodeEdgeProvider>
+            <JsonProvider>
+              <SidebarInset>{children}</SidebarInset>
+            </JsonProvider>
+          </NodeEdgeProvider>
         </SidebarProvider>
       </body>
     </html>

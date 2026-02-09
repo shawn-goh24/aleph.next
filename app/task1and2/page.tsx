@@ -1,8 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import nodeJsonData from "../../data/nodes.json"; // todo: fix import
-import edgeJsonData from "../../data/edges.json"; // todo: fix import
+import { use, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -30,6 +28,12 @@ import {
   EditCellRenderer,
   Table,
 } from "@/components/table";
+import {
+  EdgeContext,
+  NodeContext,
+  UpdateEdgeContext,
+  UpdateNodeContext,
+} from "../providers/NodeEdgeProvider";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -41,12 +45,11 @@ const SigmaCanvas = dynamic(() => import("@/components/sigma-canvas"), {
 export default function Task1And2() {
   const [isNodeSheetOpen, setIsNodeSheetOpen] = useState(false);
   const [isEdgeSheetOpen, setIsEdgeSheetOpen] = useState(false);
-  const [nodeRowData, setNodeRowData] = useState<Node[]>(
-    nodeJsonData.items as Node[],
-  );
-  const [edgeRowData, setEdgeRowData] = useState<Edge[]>(
-    edgeJsonData.items as Edge[],
-  );
+
+  const nodeRowData = use(NodeContext);
+  const setNodeRowData = use(UpdateNodeContext);
+  const edgeRowData = use(EdgeContext);
+  const setEdgeRowData = use(UpdateEdgeContext);
 
   // Shared default table options
   const defaultColDef = useMemo<ColDef>(
@@ -85,7 +88,7 @@ export default function Task1And2() {
         },
       },
     ],
-    [],
+    [setNodeRowData],
   );
 
   // Table options for Edges
@@ -138,7 +141,7 @@ export default function Task1And2() {
         },
       },
     ],
-    [nodeRowData],
+    [nodeRowData, setEdgeRowData],
   );
 
   // Submit function
@@ -163,8 +166,6 @@ export default function Task1And2() {
       ),
     );
   };
-
-  console.log(nodeRowData);
 
   return (
     <>
