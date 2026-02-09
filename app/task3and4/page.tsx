@@ -20,6 +20,7 @@ import {
   JsonListsContext,
   UpdateJsonListsContext,
 } from "../providers/JsonListsProvider";
+import { mockCharData } from "@/data/mocks";
 
 export default function Task3And4() {
   const listOfUploadedJson = use(JsonListsContext);
@@ -30,6 +31,7 @@ export default function Task3And4() {
     Object.keys(listOfUploadedJson)?.[0] ?? "",
   );
   const chartData = useMemo(() => {
+    // return mockCharData;
     const jsonData = listOfUploadedJson[selectedFileId];
 
     if (!jsonData) return null;
@@ -58,6 +60,8 @@ export default function Task3And4() {
       }));
     }
   }
+
+  console.log(chartData);
 
   async function generateReport(data: unknown) {
     // return mockOpenAiOutputData;
