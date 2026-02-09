@@ -105,7 +105,6 @@ export default function Task1And2() {
         values: nodeRowData.map((data) => data.id),
       },
       valueParser: (params) => {
-        console.log("valueParser", params);
         return params.newValue;
       },
     },

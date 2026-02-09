@@ -22,7 +22,7 @@ export function JsonUploader({ handleUpload }: JsonUploaderProps) {
       reader.onload = (e) => {
         try {
           if (!e.target) return;
-          console.log(file);
+
           // Parse the file content as a JSON object
           const content = JSON.parse(e.target.result as string);
           handleUpload(file.name, content);

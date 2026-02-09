@@ -64,8 +64,6 @@ export default function Task3And4() {
     }
   };
 
-  console.log(chartData);
-
   const generateReport = async (data: unknown) => {
     // return mockOpenAiOutputData;
     if (!data) return;
@@ -86,7 +84,7 @@ export default function Task3And4() {
 
   const generateAndDownloadPDF = async (data: OutputStructure) => {
     if (!data) return;
-    console.log(data);
+
     const blob = await pdf(<ReportDocument data={data} />).toBlob();
 
     // auto-download

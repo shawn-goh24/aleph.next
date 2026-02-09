@@ -12,8 +12,6 @@ export async function POST(req: NextRequest) {
   try {
     const { jsonData } = await req.json();
 
-    console.log("posting to openai", process.env.NEXT_PUBLIC_OPENAI_API_KEY);
-
     const response = await openai.responses.create({
       model: "gpt-4o-mini",
       input: `
