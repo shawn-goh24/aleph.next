@@ -7,8 +7,8 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-} from "./ui/sheet";
-import { Field, FieldLabel, FieldSet } from "./ui/field";
+} from "@/components/ui/sheet";
+import { Field, FieldLabel, FieldSet } from "@/components/ui/field";
 import {
   Select,
   SelectContent,
@@ -16,31 +16,30 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
-import { Button } from "./ui/button";
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import type { Edge } from "@/types/edge";
 import type { Node } from "@/types/node";
 import { randomId } from "@/lib/utils";
 import { Controller, useForm } from "react-hook-form";
 
-type Props = {
+interface EdgeSheetProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onSubmit: (node: Edge) => void;
   nodes: Node[];
-};
+}
 
-export default function EdgeSheet({
+export function EdgeSheet({
   isOpen,
   setIsOpen,
   onSubmit,
   nodes,
-}: Props) {
+}: EdgeSheetProps) {
   const {
     control,
     handleSubmit,
     reset,
-    watch,
     formState: { errors },
   } = useForm<Edge>({
     defaultValues: {
@@ -49,8 +48,6 @@ export default function EdgeSheet({
       downstreamNode: undefined,
     },
   });
-
-  const upstreamNode = watch("upstreamNode");
 
   useEffect(() => {
     if (isOpen) {
@@ -136,16 +133,14 @@ export default function EdgeSheet({
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        {nodes
-                          .filter((node) => node.id !== upstreamNode) // todo: remove?
-                          .map((node) => (
-                            <SelectItem
-                              key={`downstream-${node.id}`}
-                              value={String(node.id)}
-                            >
-                              {node.name}
-                            </SelectItem>
-                          ))}
+                        {nodes.map((node) => (
+                          <SelectItem
+                            key={`downstream-${node.id}`}
+                            value={String(node.id)}
+                          >
+                            {node.name}
+                          </SelectItem>
+                        ))}
                       </SelectGroup>
                     </SelectContent>
                   </Select>

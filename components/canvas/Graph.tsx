@@ -35,6 +35,8 @@ export default function LoadGraph(props: CanvasProps) {
   useEffect(() => {
     const graph = new MultiDirectedGraph();
 
+    if (!canvasNodes.length) return;
+
     canvasNodes.forEach((canvasNode) => {
       graph.addNode(canvasNode.id, {
         x: canvasNode.x,

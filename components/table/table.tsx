@@ -13,18 +13,14 @@ import {
 interface TableProps extends AgGridReactProps {
   paginated?: boolean;
   pageSize?: number;
+  name?: string;
 }
 
-const Table = <T,>({ pageSize = 10, ...props }: TableProps) => {
+export const Table = <T,>({ pageSize = 10, name, ...props }: TableProps) => {
   const gridRef = useRef<AgGridReact>(null);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
-  // todo: might need to uncomment when using forwardRef, also explain why need to use this
-  // useImperativeHandle(ref, () => ({
-  //   api: gridRef.current?.api ?? null,
-  // }));
 
   const onGridReady = useCallback((params: GridReadyEvent) => {
     const api = params.api;
@@ -63,6 +59,7 @@ const Table = <T,>({ pageSize = 10, ...props }: TableProps) => {
 
   return (
     <div className="h-full w-full flex flex-col gap-2">
+      <p className="font-bold pb-1">{name}</p>
       <div className="flex-1 min-h-0">
         <div style={{ height: "100%", width: "100%" }}>
           <AgGridReact<T>
@@ -90,15 +87,13 @@ const Table = <T,>({ pageSize = 10, ...props }: TableProps) => {
   );
 };
 
-export default Table;
-
-type PaginationProps = {
+interface PaginationProps {
   currentPage: number;
   totalPages: number;
   onPrev: () => void;
   onNext: () => void;
   onPageNum: (page: number) => void;
-};
+}
 
 // TODO: Fix pagination behaviour
 function Pagination({

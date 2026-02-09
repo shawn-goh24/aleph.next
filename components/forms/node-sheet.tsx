@@ -7,9 +7,9 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-} from "./ui/sheet";
-import { Field, FieldLabel, FieldSet } from "./ui/field";
-import { Input } from "./ui/input";
+} from "@/components/ui/sheet";
+import { Field, FieldLabel, FieldSet } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -17,19 +17,19 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
-import { Button } from "./ui/button";
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import type { Node } from "@/types/node";
 import { randomId } from "@/lib/utils";
 import { Controller, useForm } from "react-hook-form";
 
-type Props = {
+interface NodeSheetProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onSubmit: (node: Node) => void;
-};
+}
 
-export default function NodeSheet({ isOpen, setIsOpen, onSubmit }: Props) {
+export function NodeSheet({ isOpen, setIsOpen, onSubmit }: NodeSheetProps) {
   const {
     handleSubmit,
     control,

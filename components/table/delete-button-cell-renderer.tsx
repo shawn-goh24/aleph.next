@@ -1,14 +1,12 @@
 import type { CustomCellRendererProps } from "ag-grid-react";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
 
 interface DeleteButtonCellRendererProps extends CustomCellRendererProps {
   onClick: (params: CustomCellRendererProps) => void;
 }
 
-export default function DeleteButtonCellRenderer(
-  props: DeleteButtonCellRendererProps,
-) {
+export function DeleteButtonCellRenderer(props: DeleteButtonCellRendererProps) {
   const onClick = () => props.onClick(props);
 
   return (

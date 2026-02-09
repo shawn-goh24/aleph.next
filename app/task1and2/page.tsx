@@ -1,12 +1,8 @@
-// todo: make this page serverside
 "use client";
 
-import Table from "@/components/table";
 import { useMemo, useState } from "react";
 import nodeJsonData from "../../data/nodes.json"; // todo: fix import
 import edgeJsonData from "../../data/edges.json"; // todo: fix import
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -16,9 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Circle, Merge, Plus } from "lucide-react";
-import NodeSheet from "@/components/node-sheet";
 import type { Edge } from "@/types/edge";
-import EdgeSheet from "@/components/edge-sheet";
 import { Types, type Node } from "@/types/node";
 import type { CustomCellRendererProps } from "ag-grid-react";
 import {
@@ -28,14 +22,19 @@ import {
   type ColDef,
   type ColGroupDef,
 } from "ag-grid-community";
-import EditCellRenderer from "@/components/EditCellRenderer";
-import DeleteButtonCellRenderer from "@/components/DeleteButtonCellRenderer";
 import dynamic from "next/dynamic";
+import Header from "@/components/header";
+import { EdgeSheet, NodeSheet } from "@/components/forms";
+import {
+  DeleteButtonCellRenderer,
+  EditCellRenderer,
+  Table,
+} from "@/components/table";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 // todo: check what is this
-const SigmaCanvas = dynamic(() => import("@/components/SigmaCanvas"), {
+const SigmaCanvas = dynamic(() => import("@/components/sigma-canvas"), {
   ssr: false,
 });
 
@@ -169,14 +168,7 @@ export default function Task1And2() {
 
   return (
     <>
-      <header className="border-b flex justify-between items-center">
-        <div className="flex h-16 shrink-0 items-center gap-2 px-4">
-          <SidebarTrigger className="-ml-1" />
-          <Separator
-            orientation="vertical"
-            className="mr-2 data-[orientation=vertical]:h-4"
-          />
-        </div>
+      <Header>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button className="mx-4">
@@ -195,10 +187,11 @@ export default function Task1And2() {
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
-      </header>
+      </Header>
       <div className="m-4 h-full gap-4 grid grid-cols-1 lg:grid-cols-5 lg:grid-rows-4">
         <div className="h-full lg:col-start-1 lg:col-end-3 lg:row-start-1 lg:row-end-3">
           <Table<Node>
+            name={"Nodes"}
             rowData={nodeRowData}
             columnDefs={nodeColDefs}
             defaultColDef={defaultColDef}
@@ -211,6 +204,7 @@ export default function Task1And2() {
         </div>
         <div className="h-full lg:col-start-1 lg:col-end-3 lg:row-start-3 lg:row-end-5">
           <Table<Edge>
+            name={"Edges"}
             rowData={edgeRowData}
             columnDefs={edgeColDefs}
             defaultColDef={defaultColDef}
@@ -222,7 +216,7 @@ export default function Task1And2() {
         </div>
         <div className="border border-gray-300 rounded-lg w-full h-full lg:col-start-3 lg:col-end-6 lg:row-start-1 lg:row-end-5">
           {/* To continue if there's time */}
-          {/* <Canvas nodes={nodeRowData} edges={edgeRowData} /> */}{" "}
+          {/* <Canvas nodes={nodeRowData} edges={edgeRowData} /> */}
           <SigmaCanvas nodes={nodeRowData} edges={edgeRowData} />
         </div>
       </div>

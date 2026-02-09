@@ -17,6 +17,7 @@ import {
 import { SimulationResponse } from "@/types/json_data";
 import ChartVisualisationSection from "@/components/chart/chart-visualisation-section";
 import { JsonSelector, JsonUploader } from "@/components/json-handlers";
+import Header from "@/components/header";
 
 export default function Task3And4() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -97,15 +98,7 @@ export default function Task3And4() {
 
   return (
     <div className="bg-gray-100 h-full">
-      <header className="border-b flex justify-between items-center bg-white">
-        <div className="flex h-16 shrink-0 items-center gap-2 px-4">
-          <SidebarTrigger className="-ml-1" />
-          <Separator
-            orientation="vertical"
-            className="mr-2 data-[orientation=vertical]:h-4"
-          />
-        </div>
-      </header>
+      <Header />
       <div className="m-2 h-fit rounded-md p-2 flex gap-4 flex-col">
         {/* Select/Upload JSON and generate pdf */}
         <div className="flex justify-between flex-wrap gap-4">
