@@ -1,7 +1,6 @@
 import type { CustomCellRendererProps } from "ag-grid-react";
 import { Button } from "@/components/ui/button";
 
-// todo: add docstring
 export function EditCellRenderer(props: CustomCellRendererProps) {
   const handleClick = () => {
     props.api.startEditingCell({

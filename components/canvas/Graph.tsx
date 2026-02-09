@@ -14,7 +14,6 @@ export default function LoadGraph(props: CanvasProps) {
   const { nodes, edges } = props;
   const loadGraph = useLoadGraph();
 
-  // todo: make this better???
   const canvasNodes = useMemo<CanvasNode[]>(() => {
     let vertical = 0;
     return nodes.map((node, index) => {

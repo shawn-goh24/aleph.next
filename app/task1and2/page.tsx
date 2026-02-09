@@ -37,7 +37,7 @@ import {
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-// todo: check what is this
+// this is required as sigma canvas is only usable in client components
 const SigmaCanvas = dynamic(() => import("@/components/sigma-canvas"), {
   ssr: false,
 });
@@ -79,8 +79,6 @@ export default function Task1And2() {
         cellRendererParams: {
           suppressMouseEventHandling: () => true, // https://www.ag-grid.com/react-data-grid/component-cell-renderer/#reference-EventCellRendererParams-suppressMouseEventHandling
           onClick: (params: CustomCellRendererProps) => {
-            console.log("delete", params);
-            // todo: this causes re-render, need to think of a way to delete without rendering
             setNodeRowData((prev) =>
               prev.filter((row) => params.node.id && row.id != +params.node.id),
             );
@@ -105,7 +103,6 @@ export default function Task1And2() {
         cellEditor: "agSelectCellEditor",
         cellEditorParams: {
           values: nodeRowData.map((data) => data.id),
-          // TODO: Validation to not allow selecting same node id
         },
       },
       {
@@ -118,7 +115,6 @@ export default function Task1And2() {
         cellEditor: "agSelectCellEditor",
         cellEditorParams: {
           values: nodeRowData.map((data) => data.id),
-          // TODO: Validation to not allow selecting same node id
         },
         valueParser: (params) => {
           console.log("valueParser", params);
@@ -132,8 +128,6 @@ export default function Task1And2() {
         cellRendererParams: {
           suppressMouseEventHandling: () => true,
           onClick: (params: CustomCellRendererProps) => {
-            console.log("delete", params);
-            // todo: this causes re-render, need to think of a way to delete without rendering
             setEdgeRowData((prev) =>
               prev.filter((row) => params.node.id && row.id != +params.node.id),
             );

@@ -93,7 +93,6 @@ interface PaginationProps {
   onPageNum: (page: number) => void;
 }
 
-// TODO: Fix pagination behaviour
 function Pagination({
   currentPage,
   totalPages,

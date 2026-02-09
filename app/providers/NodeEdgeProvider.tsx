@@ -9,8 +9,8 @@ import {
   SetStateAction,
   useState,
 } from "react";
-import nodeJsonData from "../../data/nodes.json"; // todo: fix import
-import edgeJsonData from "../../data/edges.json"; // todo: fix import
+import nodeJsonData from "@/data/nodes.json";
+import edgeJsonData from "@/data/edges.json";
 
 export const NodeContext = createContext<Node[]>([]);
 export const UpdateNodeContext = createContext<
