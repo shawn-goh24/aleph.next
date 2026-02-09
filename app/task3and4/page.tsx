@@ -1,8 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Loader } from "lucide-react";
 import { useMemo, useState } from "react";
 import { pdf } from "@react-pdf/renderer";

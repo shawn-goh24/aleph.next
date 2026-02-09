@@ -145,9 +145,9 @@ export default function Task1And2() {
   const handleRowSubmit = <T extends { id: number }>(
     rowData: T[],
     setRowData: React.Dispatch<React.SetStateAction<T[]>>,
-    newRow: T,
+    newRow: T[],
   ) => {
-    setRowData([...rowData, { ...newRow }]);
+    setRowData([...rowData, ...newRow]);
   };
 
   // Edit stop function
@@ -223,14 +223,16 @@ export default function Task1And2() {
       <NodeSheet
         isOpen={isNodeSheetOpen}
         setIsOpen={setIsNodeSheetOpen}
-        onSubmit={(node) => {
-          handleRowSubmit(nodeRowData, setNodeRowData, node);
+        onSubmit={(nodes) => {
+          handleRowSubmit(nodeRowData, setNodeRowData, nodes);
         }}
       />
       <EdgeSheet
         isOpen={isEdgeSheetOpen}
         setIsOpen={setIsEdgeSheetOpen}
-        onSubmit={(edge) => handleRowSubmit(edgeRowData, setEdgeRowData, edge)}
+        onSubmit={(edges) =>
+          handleRowSubmit(edgeRowData, setEdgeRowData, edges)
+        }
         nodes={nodeRowData}
       />
     </>

@@ -10,6 +10,7 @@ export const Types = {
   TYPE_1: "Type 1",
   TYPE_2: "Type 2",
   TYPE_3: "Type 3",
+  "": "",
 } as const;
 export type Type = ValueOf<typeof Types>;
 
