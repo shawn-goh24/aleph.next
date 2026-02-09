@@ -85,7 +85,6 @@ export default function Task1And2() {
 
   // Table options for Edges
   const edgeColDefs: (ColDef<Edge> | ColGroupDef<Edge>)[] = [
-    { field: "id" },
     {
       field: "upstreamNode",
       valueFormatter: (params) => {

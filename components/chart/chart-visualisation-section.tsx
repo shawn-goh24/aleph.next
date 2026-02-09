@@ -38,7 +38,8 @@ interface ChartVisualisationSectionProps {
 export default function ChartVisualisationSection({
   chartData,
 }: ChartVisualisationSectionProps) {
-  if (chartData == null) return <p>Not available</p>;
+  if (chartData == null)
+    return <p>No visualisation to show. Please upload a JSON to see charts</p>;
 
   return (
     <div className="gap-4 grid grid-cols-1 lg:grid-cols-4 lg:grid-rows-4">
