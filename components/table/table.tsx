@@ -1,14 +1,7 @@
 import { type GetRowIdParams, type GridReadyEvent } from "ag-grid-community";
 import { AgGridReact, type AgGridReactProps } from "ag-grid-react";
-import { useCallback, useRef, useState } from "react";
-import {
-  Pagination as ShadcnPagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+import { useRef, useState } from "react";
+import Pagination from "../pagination";
 
 interface TableProps extends AgGridReactProps {
   paginated?: boolean;
@@ -22,26 +15,25 @@ export const Table = <T,>({ pageSize = 10, name, ...props }: TableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  const onGridReady = useCallback((params: GridReadyEvent) => {
+  const onGridReady = (params: GridReadyEvent) => {
     const api = params.api;
 
     const pages = api.paginationGetTotalPages();
     setTotalPages(pages);
     setCurrentPage(api.paginationGetCurrentPage() + 1);
-  }, []);
+  };
 
-  const getRowId = useCallback(
-    (params: GetRowIdParams) => String(params.data.id),
-    [],
-  );
+  const getRowId = (params: GetRowIdParams) => {
+    return String(params.data.id);
+  };
 
-  const onPaginationChanged = useCallback(() => {
+  const onPaginationChanged = () => {
     const api = gridRef.current?.api;
     if (!api) return;
 
     setCurrentPage(api.paginationGetCurrentPage() + 1);
     setTotalPages(api.paginationGetTotalPages());
-  }, []);
+  };
 
   const goToPrevPage = () => {
     gridRef.current?.api.paginationGoToPreviousPage();
@@ -53,6 +45,14 @@ export const Table = <T,>({ pageSize = 10, name, ...props }: TableProps) => {
 
   const goToPageNum = (page: number) => {
     gridRef.current?.api.paginationGoToPage(page);
+  };
+
+  const goToFirst = () => {
+    gridRef.current?.api.paginationGoToPage(0);
+  };
+
+  const goToLast = () => {
+    gridRef.current?.api.paginationGoToPage(totalPages);
   };
 
   return (
@@ -77,55 +77,12 @@ export const Table = <T,>({ pageSize = 10, name, ...props }: TableProps) => {
           currentPage={currentPage}
           totalPages={totalPages}
           onPrev={goToPrevPage}
+          onFirst={goToFirst}
           onNext={goToNextPage}
+          onLast={goToLast}
           onPageNum={goToPageNum}
         />
       </div>
     </div>
   );
 };
-
-interface PaginationProps {
-  currentPage: number;
-  totalPages: number;
-  onPrev: () => void;
-  onNext: () => void;
-  onPageNum: (page: number) => void;
-}
-
-function Pagination({
-  currentPage,
-  totalPages,
-  onPrev,
-  onNext,
-  onPageNum,
-}: PaginationProps) {
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-
-  return (
-    <ShadcnPagination>
-      <PaginationContent>
-        <PaginationItem>
-          <PaginationPrevious onClick={onPrev} />
-        </PaginationItem>
-
-        {pages.map((page) => {
-          return (
-            <PaginationItem key={page}>
-              <PaginationLink
-                onClick={() => onPageNum(page - 1)}
-                isActive={page === currentPage}
-              >
-                {page}
-              </PaginationLink>
-            </PaginationItem>
-          );
-        })}
-
-        <PaginationItem>
-          <PaginationNext onClick={onNext} />
-        </PaginationItem>
-      </PaginationContent>
-    </ShadcnPagination>
-  );
-}

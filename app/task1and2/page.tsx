@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useMemo, useState } from "react";
+import { use, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -52,91 +52,78 @@ export default function Task1And2() {
   const setEdgeRowData = use(UpdateEdgeContext);
 
   // Shared default table options
-  const defaultColDef = useMemo<ColDef>(
-    () => ({
-      flex: 1,
-      editable: true,
-      cellRenderer: EditCellRenderer,
-    }),
-    [],
-  );
+  const defaultColDef: ColDef = {
+    flex: 1,
+    editable: true,
+    cellRenderer: EditCellRenderer,
+  };
 
   // Table options for Nodes
-  const nodeColDefs = useMemo<(ColDef<Node> | ColGroupDef<Node>)[]>(
-    () => [
-      { field: "name" },
-      {
-        field: "type",
-        cellEditor: "agSelectCellEditor",
-        cellEditorParams: {
-          values: Object.values(Types),
+  const nodeColDefs: (ColDef<Node> | ColGroupDef<Node>)[] = [
+    { field: "name" },
+    {
+      field: "type",
+      cellEditor: "agSelectCellEditor",
+      cellEditorParams: {
+        values: Object.values(Types),
+      },
+    },
+    {
+      colId: "customButton",
+      headerName: "Action",
+      cellRenderer: DeleteButtonCellRenderer,
+      cellRendererParams: {
+        suppressMouseEventHandling: () => true, // https://www.ag-grid.com/react-data-grid/component-cell-renderer/#reference-EventCellRendererParams-suppressMouseEventHandling
+        onClick: (params: CustomCellRendererProps) => {
+          setNodeRowData((prev) =>
+            prev.filter((row) => params.node.id && row.id != +params.node.id),
+          );
         },
       },
-      {
-        colId: "customButton",
-        headerName: "Action",
-        cellRenderer: DeleteButtonCellRenderer,
-        cellRendererParams: {
-          suppressMouseEventHandling: () => true, // https://www.ag-grid.com/react-data-grid/component-cell-renderer/#reference-EventCellRendererParams-suppressMouseEventHandling
-          onClick: (params: CustomCellRendererProps) => {
-            setNodeRowData((prev) =>
-              prev.filter((row) => params.node.id && row.id != +params.node.id),
-            );
-          },
-        },
-      },
-    ],
-    [setNodeRowData],
-  );
+    },
+  ];
 
   // Table options for Edges
-  const edgeColDefs = useMemo<(ColDef<Edge> | ColGroupDef<Edge>)[]>(
-    () => [
-      { field: "id" },
-      {
-        field: "upstreamNode",
-        valueFormatter: (params) => {
-          return (
-            nodeRowData.find((data) => data.id === params.value)?.name ?? ""
+  const edgeColDefs: (ColDef<Edge> | ColGroupDef<Edge>)[] = [
+    { field: "id" },
+    {
+      field: "upstreamNode",
+      valueFormatter: (params) => {
+        return nodeRowData.find((data) => data.id === params.value)?.name ?? "";
+      },
+      cellEditor: "agSelectCellEditor",
+      cellEditorParams: {
+        values: nodeRowData.map((data) => data.id),
+      },
+    },
+    {
+      field: "downstreamNode",
+      valueFormatter: (params) => {
+        return nodeRowData.find((data) => data.id === params.value)?.name ?? "";
+      },
+      cellEditor: "agSelectCellEditor",
+      cellEditorParams: {
+        values: nodeRowData.map((data) => data.id),
+      },
+      valueParser: (params) => {
+        console.log("valueParser", params);
+        return params.newValue;
+      },
+    },
+    {
+      colId: "customButton",
+      headerName: "Action",
+      cellRenderer: DeleteButtonCellRenderer,
+      cellRendererParams: {
+        suppressMouseEventHandling: () => true,
+        onClick: (params: CustomCellRendererProps) => {
+          setEdgeRowData((prev) =>
+            prev.filter((row) => params.node.id && row.id != +params.node.id),
           );
         },
-        cellEditor: "agSelectCellEditor",
-        cellEditorParams: {
-          values: nodeRowData.map((data) => data.id),
-        },
       },
-      {
-        field: "downstreamNode",
-        valueFormatter: (params) => {
-          return (
-            nodeRowData.find((data) => data.id === params.value)?.name ?? ""
-          );
-        },
-        cellEditor: "agSelectCellEditor",
-        cellEditorParams: {
-          values: nodeRowData.map((data) => data.id),
-        },
-        valueParser: (params) => {
-          console.log("valueParser", params);
-          return params.newValue;
-        },
-      },
-      {
-        colId: "customButton",
-        headerName: "Action",
-        cellRenderer: DeleteButtonCellRenderer,
-        cellRendererParams: {
-          suppressMouseEventHandling: () => true,
-          onClick: (params: CustomCellRendererProps) => {
-            setEdgeRowData((prev) =>
-              prev.filter((row) => params.node.id && row.id != +params.node.id),
-            );
-          },
-        },
-      },
-    ],
-    [nodeRowData, setEdgeRowData],
-  );
+    },
+  ];
 
   // Submit function
   const handleRowSubmit = <T extends { id: number }>(

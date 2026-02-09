@@ -45,7 +45,10 @@ export default function Task3And4() {
     };
   }, [listOfUploadedJson, selectedFileId]);
 
-  function handleUpload(fileName: string, content: SimulationResponse | null) {
+  const handleUpload = (
+    fileName: string,
+    content: SimulationResponse | null,
+  ) => {
     if (content != null) {
       const id = String(randomId());
       setSelectedFileId(id);
@@ -59,11 +62,11 @@ export default function Task3And4() {
         },
       }));
     }
-  }
+  };
 
   console.log(chartData);
 
-  async function generateReport(data: unknown) {
+  const generateReport = async (data: unknown) => {
     // return mockOpenAiOutputData;
     if (!data) return;
 
@@ -79,9 +82,9 @@ export default function Task3And4() {
     const result = await res.json();
     setIsSubmitting(false);
     return JSON.parse(result.report);
-  }
+  };
 
-  async function generateAndDownloadPDF(data: OutputStructure) {
+  const generateAndDownloadPDF = async (data: OutputStructure) => {
     if (!data) return;
     console.log(data);
     const blob = await pdf(<ReportDocument data={data} />).toBlob();
@@ -95,12 +98,12 @@ export default function Task3And4() {
 
     // cleanup
     URL.revokeObjectURL(url);
-  }
+  };
 
-  async function handleGeneratePdf() {
+  const handleGeneratePdf = async () => {
     const result = await generateReport(listOfUploadedJson[selectedFileId]);
     await generateAndDownloadPDF(result);
-  }
+  };
 
   return (
     <div className="bg-gray-100 h-full">
