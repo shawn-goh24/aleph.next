@@ -79,7 +79,11 @@ export default function LoadGraph(props: CanvasProps) {
       }
     });
 
-    loadGraph(graph);
+    try {
+      loadGraph(graph);
+    } catch (e) {
+      console.error(e);
+    }
   }, [canvasNodes, edges, loadGraph]);
 
   return null;
