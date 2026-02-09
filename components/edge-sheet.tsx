@@ -137,7 +137,7 @@ export default function EdgeSheet({
                     <SelectContent>
                       <SelectGroup>
                         {nodes
-                          .filter((node) => node.id !== upstreamNode)
+                          .filter((node) => node.id !== upstreamNode) // todo: remove?
                           .map((node) => (
                             <SelectItem
                               key={`downstream-${node.id}`}

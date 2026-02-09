@@ -1,12 +1,12 @@
 import { ChangeEvent, useState } from "react";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 import { SimulationResponse } from "@/types/json_data";
 
 interface JsonUploaderProps {
   handleUpload: (fileName: string, content: SimulationResponse | null) => void;
 }
 
-export default function JsonUploader({ handleUpload }: JsonUploaderProps) {
+export function JsonUploader({ handleUpload }: JsonUploaderProps) {
   const [error, setError] = useState("");
 
   const handleFileChange = (
@@ -43,7 +43,7 @@ export default function JsonUploader({ handleUpload }: JsonUploaderProps) {
       reader.readAsText(file);
     } else {
       setError("Please select a valid JSON file.");
-      handleUpload(file.name, null);
+      handleUpload("", null);
     }
   };
 

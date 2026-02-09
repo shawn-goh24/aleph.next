@@ -6,49 +6,17 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Loader } from "lucide-react";
 import { useMemo, useState } from "react";
 import { pdf } from "@react-pdf/renderer";
-import JsonUploader from "@/components/json-uploader";
 import { OutputStructure } from "@/types/openai";
 import ReportDocument from "@/components/report-document";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { randomId } from "@/lib/utils";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
-import {
-  CartesianGrid,
-  Line,
-  LineChart,
-  Pie,
-  PieChart,
-  PolarAngleAxis,
-  PolarGrid,
-  Radar,
-  RadarChart,
-  XAxis,
-} from "recharts";
 import {
   generateChartForVariableImpactDistribution,
   generateSimulatedSummary,
   generateTop3Variable,
 } from "@/lib/chart";
 import { SimulationResponse } from "@/types/json_data";
+import ChartVisualisationSection from "@/components/chart/chart-visualisation-section";
+import { JsonSelector, JsonUploader } from "@/components/json-handlers";
 
 export default function Task3And4() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -58,7 +26,8 @@ export default function Task3And4() {
   const [selectedFileId, setSelectedFileId] = useState<string>("");
   const chartData = useMemo(() => {
     const jsonData = listOfUploadedJson[selectedFileId];
-    if (!jsonData) return {};
+
+    if (!jsonData) return null;
 
     return {
       variableImpactDistribution: generateChartForVariableImpactDistribution(
@@ -141,27 +110,15 @@ export default function Task3And4() {
         {/* Select/Upload JSON and generate pdf */}
         <div className="flex justify-between flex-wrap gap-4">
           <div className="flex gap-4 flex-wrap">
-            <Select
-              value={selectedFileId}
-              onValueChange={(value) => setSelectedFileId(value)}
-              disabled={
+            <JsonSelector
+              listOfJsonData={listOfUploadedJson}
+              selectedId={selectedFileId}
+              handleSelectionValueChange={(value) => setSelectedFileId(value)}
+              isDisabled={
                 listOfUploadedJson == undefined ||
                 !Object.values(listOfUploadedJson).length
               }
-            >
-              <SelectTrigger className=" bg-white cursor-pointer hover:bg-gray-50">
-                <SelectValue placeholder="Choose Json" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  {Object.entries(listOfUploadedJson).map(([key, value]) => (
-                    <SelectItem key={key} value={String(key)}>
-                      {value.name}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+            />
             <JsonUploader handleUpload={handleUpload} />
           </div>
           <Button disabled={isSubmitting} onClick={handleGeneratePdf}>
@@ -177,180 +134,7 @@ export default function Task3And4() {
         </div>
 
         {/* Charts */}
-        <div className="gap-4 grid grid-cols-1 lg:grid-cols-4 lg:grid-rows-4">
-          <div className="h-full lg:col-start-1 lg:col-end-3 lg:row-start-1 lg:row-end-3">
-            <Card className="flex flex-col h-full w-full">
-              <CardHeader className="items-center pb-0">
-                <CardTitle>Variable Impact Distribution</CardTitle>
-                <CardDescription>
-                  Shows percentage of each variable
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex-1 pb-0">
-                <ChartContainer
-                  config={{}}
-                  className="mx-auto aspect-square max-h-87.5"
-                >
-                  <PieChart>
-                    <ChartTooltip
-                      cursor={false}
-                      content={<ChartTooltipContent hideLabel />}
-                    />
-                    <Pie
-                      data={chartData.variableImpactDistribution?.chart ?? []}
-                      dataKey="value"
-                      nameKey="name"
-                    />
-                  </PieChart>
-                </ChartContainer>
-              </CardContent>
-              <CardFooter className="flex-col gap-2 text-sm">
-                <div className="flex items-center gap-4 leading-none font-medium">
-                  <p>Legend: </p>
-                  {Object.values(
-                    chartData.variableImpactDistribution?.config ?? {},
-                  ).map((variable) => (
-                    <div
-                      key={variable.label}
-                      className="flex gap-1 items-center"
-                    >
-                      <div
-                        className={"w-4 h-4"}
-                        style={{ backgroundColor: variable.color }}
-                      />
-                      <p>{variable.label}</p>
-                    </div>
-                  ))}
-                </div>
-              </CardFooter>
-            </Card>
-          </div>
-          <div className="h-full lg:col-start-3 lg:col-end-5 lg:row-start-1 lg:row-end-3">
-            <Card className="h-full w-full">
-              <CardHeader className="items-center pb-4">
-                <CardTitle>Top 3 scenarios</CardTitle>
-                <CardDescription>
-                  Showing the top 3 scenarios across all variables
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="pb-0">
-                <ChartContainer
-                  config={chartData.top3Variable?.config ?? {}}
-                  className="mx-auto aspect-square max-h-87.5"
-                >
-                  <RadarChart data={chartData.top3Variable?.chart}>
-                    <ChartTooltip
-                      cursor={false}
-                      content={<ChartTooltipContent indicator="line" />}
-                    />
-                    <PolarAngleAxis dataKey="name" />
-                    <PolarGrid radialLines={false} />
-                    {Object.values(chartData.top3Variable?.config ?? {}).map(
-                      (variable) => (
-                        <Radar
-                          key={variable.label}
-                          dataKey={variable.label}
-                          fill={`var(--color-${variable.label})`}
-                          fillOpacity={0}
-                          stroke={`var(--color-${variable.label})`}
-                          strokeWidth={2}
-                        />
-                      ),
-                    )}
-                  </RadarChart>
-                </ChartContainer>
-              </CardContent>
-              <CardFooter className="flex-col gap-2 text-sm">
-                <div className="flex items-center gap-2 leading-none font-medium">
-                  <p>Legend: </p>
-                  {Object.values(chartData.top3Variable?.config ?? {}).map(
-                    (variable) => (
-                      <div
-                        key={variable.label}
-                        className="flex gap-1 items-center"
-                      >
-                        <div
-                          className={"w-4 h-4"}
-                          style={{ backgroundColor: variable.color }}
-                        />
-                        <p>{variable.label}</p>
-                      </div>
-                    ),
-                  )}
-                </div>
-              </CardFooter>
-            </Card>
-          </div>
-          <div className="w-full h-full lg:col-start-1 lg:col-end-5 lg:row-start-3 lg:row-end-5">
-            <Card className="h-full w-full">
-              <CardHeader>
-                <CardTitle>
-                  All scenarios with variables including KPI
-                </CardTitle>
-                <CardDescription>Line chart to compare</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ChartContainer
-                  config={chartData.simulatedSummary?.config ?? {}}
-                  className="mx-auto aspect-square max-h-87.5 w-full"
-                >
-                  <LineChart
-                    accessibilityLayer
-                    data={chartData.simulatedSummary?.chart}
-                    margin={{
-                      left: 12,
-                      right: 12,
-                    }}
-                  >
-                    <CartesianGrid vertical={false} />
-                    <XAxis
-                      dataKey="scenario"
-                      tickLine={false}
-                      axisLine={false}
-                      tickMargin={8}
-                      tickFormatter={(value) => value.slice(0, 3)}
-                    />
-                    <ChartTooltip
-                      cursor={false}
-                      content={<ChartTooltipContent />}
-                    />
-                    {Object.values(
-                      chartData.simulatedSummary?.config ?? {},
-                    ).map((variable) => (
-                      <Line
-                        key={variable.label}
-                        dataKey={variable.label}
-                        type="monotone"
-                        stroke={`var(--color-${variable.label})`}
-                        strokeWidth={2}
-                        dot={false}
-                      />
-                    ))}
-                  </LineChart>
-                </ChartContainer>
-              </CardContent>
-              <CardFooter>
-                <div className="flex w-full items-start gap-2 text-sm">
-                  <p>Legend: </p>
-                  {Object.values(chartData.simulatedSummary?.config ?? {}).map(
-                    (variable) => (
-                      <div
-                        key={variable.label}
-                        className="flex gap-1 items-center"
-                      >
-                        <div
-                          className={"w-4 h-4"}
-                          style={{ backgroundColor: variable.color }}
-                        />
-                        <p>{variable.label}</p>
-                      </div>
-                    ),
-                  )}
-                </div>
-              </CardFooter>
-            </Card>
-          </div>
-        </div>
+        <ChartVisualisationSection chartData={chartData} />
       </div>
     </div>
   );
