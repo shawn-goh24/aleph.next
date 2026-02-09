@@ -183,8 +183,9 @@ function ChartTooltipContent({
       {!nestLabel ? tooltipLabel : null}
       <div className="grid gap-1.5">
         {payload
-          .filter((item) => item.type !== "none")
-          .map((item, index) => {
+          .filter((item: { type: any }) => item.type !== "none") // ! Shadcn type error
+          .map((item: any, index: number) => {
+            // ! Shadcn type error
             const key = `${nameKey || item.name || item.dataKey || "value"}`;
             const itemConfig = getPayloadConfigFromPayload(config, item, key);
             const indicatorColor = color || item.payload.fill || item.color;
@@ -261,11 +262,14 @@ function ChartLegendContent({
   payload,
   verticalAlign = "bottom",
   nameKey,
-}: React.ComponentProps<"div"> &
-  Pick<RechartsPrimitive.LegendProps, "payload" | "verticalAlign"> & {
-    hideIcon?: boolean;
-    nameKey?: string;
-  }) {
+}: React.ComponentProps<"div"> & {
+  // ! Shadcn type error
+  // Pick<RechartsPrimitive.LegendProps, "payload" | "verticalAlign"> & {
+  hideIcon?: boolean;
+  nameKey?: string;
+  payload?: any;
+  verticalAlign?: any;
+}) {
   const { config } = useChart();
 
   if (!payload?.length) {
@@ -281,8 +285,8 @@ function ChartLegendContent({
       )}
     >
       {payload
-        .filter((item) => item.type !== "none")
-        .map((item) => {
+        .filter((item: any) => item.type !== "none") // ! Shadcn type error
+        .map((item: any) => {
           const key = `${nameKey || item.dataKey || "value"}`;
           const itemConfig = getPayloadConfigFromPayload(config, item, key);
 
