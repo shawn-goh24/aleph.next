@@ -66,10 +66,18 @@ export default function Pagination({
         })}
 
         <ButtonGroup>
-          <Button variant={"outline"} onClick={onNext} disabled={isLastPage}>
+          <Button
+            variant={"outline"}
+            onClick={onNext}
+            disabled={totalPages === 0 || isLastPage}
+          >
             Next
           </Button>
-          <Button variant={"outline"} onClick={onLast} disabled={isLastPage}>
+          <Button
+            variant={"outline"}
+            onClick={onLast}
+            disabled={totalPages === 0 || isLastPage}
+          >
             Last
           </Button>
         </ButtonGroup>
