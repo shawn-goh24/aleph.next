@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Alpeh Technology",
+  title: "AlpehTech Take home assignment",
   description: "Take home assignment",
 };
 
